@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 // Here we are doing unit testing
 void main() {
-  group('eamil validation', () {
+  group('email validation', () {
     test("validate for empty email id", () {
       //Arrange & Act
       var result = Validator.validateEmail("");
@@ -33,7 +33,7 @@ void main() {
       //Arrange & Act
       var result = Validator.validatePassword('');
       //Assert
-      expect(result, 'Required a password');
+      expect(result, 'Required field');
     });
 
     test('Validate for invalid password', () {

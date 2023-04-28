@@ -15,7 +15,7 @@ class Validator {
 
   static String? validatePassword(String password) {
     if (password.isEmpty) {
-      return 'Required a password';
+      return 'Required field';
     }
     String pattern = r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$';
     RegExp regExp = RegExp(pattern);

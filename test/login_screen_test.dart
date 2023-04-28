@@ -24,11 +24,10 @@ void main() {
       Finder title = find.text('Login Screen');
 
       //Assert
-      //Assert
       expect(title, findsOneWidget);
     });
 
-    testWidgets("Should have one text field fform to collect user email id",
+    testWidgets("Should have one text field form, to collect user email id",
         (WidgetTester tester) async {
       //Arrange
       await tester.pumpWidget(
@@ -90,10 +89,121 @@ void main() {
 
       // Act
       //we need to simulate the tap button first
-      Finder loginButton = find.byKey(const ValueKey('Login Button'),);
+      Finder loginButton = find.byKey(
+        const ValueKey('Login Button'),
+      );
+      //we want to test and simulate a tap on the button
+      await tester.tap(loginButton);
+      //we are waiting for all annimations to complete
+      await tester.pumpAndSettle();
 
+      Finder errorTexts = find.text('Required field');
 
       // Assert
+      expect(
+        errorTexts,
+        findsAtLeastNWidgets(2),
+      );
+    });
+
+    testWidgets(
+        "Shoudl show required correct email message if format is wrong ",
+        (WidgetTester tester) async {
+      //Arrange
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: LoginScreen(),
+        ),
+      );
+
+      // Act
+      Finder userNameTextField = find.byKey(
+        const ValueKey("email_id"),
+      );
+      await tester.enterText(userNameTextField, 'some@com');
+      //we need to simulate the tap button first
+      Finder loginButton = find.byKey(
+        const ValueKey('Login Button'),
+      );
+      //we want to test and simulate a tap on the button
+      await tester.tap(loginButton);
+      //we are waiting for all annimations to complete
+      await tester.pumpAndSettle();
+
+      Finder errorText = find.text('Please enter a valid email Id');
+
+      // Assert
+      expect(
+        errorText,
+        findsOneWidget,
+      );
+    });
+
+    testWidgets("Shoudl show required correct password if format is wrong ",
+        (WidgetTester tester) async {
+      //Arrange
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: LoginScreen(),
+        ),
+      );
+
+      // Act
+      Finder userNameTextField = find.byKey(
+        const ValueKey("password"),
+      );
+      await tester.enterText(userNameTextField, 'somecom');
+      //we need to simulate the tap button first
+      Finder loginButton = find.byKey(
+        const ValueKey('Login Button'),
+      );
+      //we want to test and simulate a tap on the button
+      await tester.tap(loginButton);
+      //we are waiting for all annimations to complete
+      await tester.pumpAndSettle();
+
+      Finder errorText = find.text('Please add a valid password');
+
+      // Assert
+      expect(
+        errorText,
+        findsOneWidget,
+      );
+    });
+
+//This is for when we succesfully login
+    testWidgets("Should submit form when user email & password is valid",
+        (WidgetTester tester) async {
+  //Arange
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: LoginScreen(),
+        ),
+      );
+
+  //Act
+      //we need to identify the widgets in question
+      Finder userNameTextField = find.byKey(
+        const ValueKey("email_id"),
+      );
+      Finder passwordTextField = find.byKey(
+        const ValueKey("password"),
+      );
+      // we need to wait for the input of the user and compare it to a correct format
+      await tester.enterText(userNameTextField, 'some@gmail.com');
+      await tester.enterText(passwordTextField, 'sS3!hfgdo');
+      // we need to listen for the button tap
+      Finder loginButton = find.byKey(
+        const ValueKey("Login Button"),
+      );
+      await tester.tap(loginButton);
+      await tester.pumpAndSettle();
+      // we need to register the errors that we are looking for
+      Finder errorTexts = find.text("required field");
+
+  //Assert
+      //since everything works as planned we return nothing
+      expect(errorTexts, findsNothing);
     });
   });
 }
